@@ -1,0 +1,21 @@
+{
+  "findImage": {
+    "id": "200",
+    "title": "Sample Image",
+    "date": "2024-01-15",
+    "rating100": 90,
+    "organized": false,
+    "studio": {"name": "Studio X", "parent_studio": null},
+    "tags": [{"name": "Portrait"}],
+    "performers": [{"name": "Alice"}],
+    "visual_files": [
+      {
+        "id": "if1",
+        "path": "/media/incoming/photos/sample.jpg",
+        "basename": "sample.jpg",
+        "width": 4000,
+        "height": 3000
+      }
+    ]
+  }
+}

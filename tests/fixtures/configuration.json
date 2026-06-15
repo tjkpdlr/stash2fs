@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "general": {
+      "stashes": [
+        {"path": "/media/library"},
+        {"path": "/media/incoming"}
+      ]
+    }
+  }
+}

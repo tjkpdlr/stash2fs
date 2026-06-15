@@ -1,0 +1,47 @@
+name: stash2fs
+description: Organize scenes, images, and galleries on disk from Stash metadata.
+url: https://github.com/guhcampos/stash2fs
+version: 0.1.0
+exec:
+  - python
+  - "{pluginDir}/stash2fs_plugin.py"
+interface: raw
+settings:
+  enabled:
+    displayName: Enabled
+    description: React to update hooks.
+    type: BOOLEAN
+  dryRun:
+    displayName: Dry Run
+    description: Log planned moves without performing them.
+    type: BOOLEAN
+hooks:
+  - name: hook_rename_scene
+    description: Move scene file(s) when a scene is updated.
+    triggeredBy:
+      - Scene.Update.Post
+  - name: hook_rename_image
+    description: Move image file(s) when an image is updated.
+    triggeredBy:
+      - Image.Update.Post
+  - name: hook_rename_gallery
+    description: Move gallery file(s) when a gallery is updated.
+    triggeredBy:
+      - Gallery.Update.Post
+tasks:
+  - name: "Enable"
+    description: Enable the update hooks.
+    defaultArgs:
+      mode: enable
+  - name: "Disable"
+    description: Disable the update hooks.
+    defaultArgs:
+      mode: disable
+  - name: "Dry-run"
+    description: Toggle dry-run mode.
+    defaultArgs:
+      mode: dryrun
+  - name: "Organize all"
+    description: Process all scenes, images, and galleries (bulk).
+    defaultArgs:
+      mode: bulk

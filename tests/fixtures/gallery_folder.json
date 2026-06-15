@@ -1,0 +1,14 @@
+{
+  "findGallery": {
+    "id": "301",
+    "title": "Folder Gallery",
+    "date": "2023-06-01",
+    "rating100": 70,
+    "organized": true,
+    "folder_path": "/media/library/galleries/folder-set",
+    "studio": {"name": "Pack Co", "parent_studio": null},
+    "tags": [],
+    "performers": [],
+    "files": []
+  }
+}

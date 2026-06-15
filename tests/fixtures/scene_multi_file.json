@@ -1,0 +1,42 @@
+{
+  "findScene": {
+    "id": "100",
+    "title": "Big Buck Bunny",
+    "code": "BBB-001",
+    "date": "2008-05-20",
+    "rating100": 80,
+    "organized": true,
+    "studio": {
+      "name": "Blender Institute",
+      "parent_studio": null
+    },
+    "tags": [{"name": "Animation"}],
+    "performers": [{"name": "Bunny", "gender": "MALE"}],
+    "files": [
+      {
+        "id": "f1",
+        "path": "/media/library/scenes/bbb.mp4",
+        "basename": "bbb.mp4",
+        "width": 1920,
+        "height": 1080,
+        "video_codec": "h264",
+        "audio_codec": "aac",
+        "frame_rate": 24.0,
+        "bit_rate": 5000000,
+        "duration": 600.0
+      },
+      {
+        "id": "f2",
+        "path": "/media/library/scenes/bbb-720.mp4",
+        "basename": "bbb-720.mp4",
+        "width": 1280,
+        "height": 720,
+        "video_codec": "h264",
+        "audio_codec": "aac",
+        "frame_rate": 24.0,
+        "bit_rate": 2500000,
+        "duration": 600.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "findGallery": {
+    "id": "300",
+    "title": "Zip Gallery",
+    "date": "2023-06-01",
+    "rating100": 70,
+    "organized": true,
+    "folder_path": null,
+    "studio": {"name": "Pack Co", "parent_studio": null},
+    "tags": [],
+    "performers": [],
+    "files": [
+      {
+        "id": "gf1",
+        "path": "/media/library/galleries/set.zip",
+        "basename": "set.zip"
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+"""Gallery CLI commands."""
+
+from __future__ import annotations
+
+import click
+
+from stash2fs.cli.main import cli
+
+
+@cli.group()
+def gallery() -> None:
+    """Gallery operations."""
+
+
+@gallery.command("mv")
+@click.argument("item_id", required=False)
+@click.option("--all", "all_items", is_flag=True, help="Process all galleries.")
+@click.option("--template-name", default=None, help="Force a named template override.")
+@click.option("--tag", "tags", multiple=True)
+@click.option("--studio", "studios", multiple=True)
+@click.option("--path-prefix", "path_prefixes", multiple=True)
+@click.option("--organized/--unorganized", default=None)
+@click.pass_context
+def gallery_mv(
+    ctx: click.Context,
+    item_id: str | None,
+    all_items: bool,
+    template_name: str | None,
+    tags: tuple[str, ...],
+    studios: tuple[str, ...],
+    path_prefixes: tuple[str, ...],
+    organized: bool | None,
+) -> None:
+    """Move gallery file(s) to template-derived locations."""
+    from stash2fs.cli.main import _run_mv
+
+    _run_mv(
+        ctx,
+        "gallery",
+        item_id,
+        all_items,
+        template_name,
+        tags,
+        studios,
+        path_prefixes,
+        organized,
+    )

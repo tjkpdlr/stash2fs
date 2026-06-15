@@ -1,0 +1,3 @@
+[submodule "references/stash-plugins-fabio"]
+	path = references/stash-plugins-fabio
+	url = https://github.com/f4bio/stash-plugins.git
