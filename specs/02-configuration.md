@@ -29,11 +29,11 @@ When executing in **Plugin Mode**, the `stash-plugin-wrapper` script takes care 
 These are [Jinja](https://jinja.palletsprojects.com/en/stable/) templates used to compute the destination path.
 
 
-| Setting                 | Type     | Default                                                                      | Notes                             |
-| ----------------------- | -------- | ---------------------------------------------------------------------------- | --------------------------------- |
-| `scene_path_template`   | `string` | `scenes/{{ studio }}/{{ date }} - {{ title }}.{{ extension }}`               | Template Path for Scenes          |
-| `gallery_path_template` | `string` | `images/{{ date }} - {{ title }}/{{ datetime }}{{ unique }}.{{ extension }}` | Template Path for Galleries       |
-| `image_path_template`   | `string` | `images/misc/{{ datetime }}{{ unique }}.{{ extension }}`                     | Template Path for Unsorted Images |
+| Setting                 | Type     | Default                                                                            | Notes                             |
+| ----------------------- | -------- | ---------------------------------------------------------------------------------- | --------------------------------- |
+| `scene_path_template`   | `string` | `scenes/{{ studio }}/{{ date }}{{ sep }}{{ title }}.{{ extension }}`               | Template Path for Scenes          |
+| `gallery_path_template` | `string` | `images/{{ date }}{{ sep }}{{ title }}/{{ datetime }}{{ unique }}.{{ extension }}` | Template Path for Galleries       |
+| `image_path_template`   | `string` | `images/misc/{{ datetime }}{{ unique }}.{{ extension }}`                           | Template Path for Unsorted Images |
 
 
 ## Template Tag Mappings
@@ -41,10 +41,35 @@ These are [Jinja](https://jinja.palletsprojects.com/en/stable/) templates used t
 This is the list of available template tags for building **Path Templates** and their fallbacks.
 
 
-| Setting        | Metadata Field | Fallback | Notes |
-| -------------- | -------------- | -------- | ----- |
-| `{{ studio }}` | `string`       | ``misc`` |       |
+| Setting                     | Metadata Field         | Default / Fallback String | Notes                                                                                                 |
+| --------------------------- | ---------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `{{ sep }}`                 | N/A                    | `' - ', not '-'`          | A fied separator for filenames, used when a folder or filename is composed of multiple Template Tags. |
+| `{{ date }}`                | `release_date`         | N/A                       | The release date of a media file. Does not have a default or fallback string.                        |
+| `{{ studio }}`              | `studio.name`          | `misc`                    | The media file **Studio** from Stash                                                                  |
+| `{{ performer.name }}`      | `performer.name`       | N/A                       | The performer name. Does not have a default of fallback string.                                       |
+| `{{ performer.birthyear }}` | `performer.birth_year` | `__unknown`__             | The performer birth year.                                                                             |
+| `{{ performer.country }}`   | `performer.country`    | `__unknown`__             | The performer country of birth.                                                                       |
+| `{{ extension }}`           | N/A                    | N/A                       |                                                                                                       |
 
+
+### A Note on `{{ sep }}`
+
+The `{{ sep }}` tag is the default conditional separator for directory or file names containing multiple template tags. It defaults to  `-`  so templates with `{{ date }}` = `1979-01-01` get rendered as such:
+
+- `{{ date }}{{ sep }}{{ studio }}` is rendered as `1979-01-01 - Studio Name`
+- `{{ studio }}/{{ date }}{{ sep }}{{ title }}.{{ extension }}` is rendered as `Studio Name/1979-01-01 - Title.ext`
+
+The use of `{{ sep }}` however allows for empty fallbacks to be omitted without breaking the filename, which is why we call it a *conditional separator* - it will only be rendered if the preceding tag is not empty.
+
+This way, if `{{ date }}` evaluates to *empty* in the examples above:
+
+- `{{ date }}{{ sep }}{{ studio }}` is rendered as `Studio Name`
+- `{{ studio }}/{{ date }}{{ sep }}{{ title }}.{{ extension }}` is rendered as `Studio Name/Title.ext`
+
+For this reason, the use of `{{ sep }}` should be preferred over using a literal  `-`  since, with an empty `{{ date }}`:
+
+- `{{ studio }}/{{ date }}{{ sep }}{{ title }}.{{ extension }}` is rendered as `Studio Name/Title.ext`
+- `{{ studio }}/{{ date }} - {{ title }}.{{ extension }}` is rendered as `Studio Name/ - Title.ext`
 
 ## Stash UI Only Settings
 
