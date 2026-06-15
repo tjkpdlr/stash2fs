@@ -22,6 +22,8 @@ When executing in **Plugin Mode**, the `stash-plugin-wrapper` script takes care 
 | `stash_api_timeout_seconds` | `integer` | `30`                            | How long to wait for operations against the Stash API before failing.                                                                                                                                                                                                                                                                                                                                      |
 | `collision_behavior`        | `string`  | `skip`                          | The behavior of `stash2fs` when it encounters a colision - that is - tries to move a file to a path already containing the same file. Defaults to `skip` which skips the file and logs a `WARNING`. If running a bulk operation, it may continue normally for other files. Other options: - `fail` terminates the operation entirely and logs an error. If running a bulk operation, it exits immediately. |
 | `library_path`              | `string`  | `Required`                      | This is the path to the `stash2fs` **Library** and arguably the most important configuration setting. This **must** be a path managed by Stash, and **should not** contain files not managed by `stash2fs` if possible, to avoid conflicts.                                                                                                                                                                |
+| `progress`                  | `boolean` | `True`                          | Displays a Progress Bar when running **Bulk** operations. Disabled by default when running as a **Stash Plugin**                                                                                                                                                                                                                                                                                           |
+| `log_format`                | `string`  | `default`                       | The log format for the tool output. Maybe be one of `default`, `json` or `stash`.                                                                                                                                                                                                                                                                                                                          |
 
 
 ## Path Templates
@@ -41,15 +43,15 @@ These are [Jinja](https://jinja.palletsprojects.com/en/stable/) templates used t
 This is the list of available template tags for building **Path Templates** and their fallbacks.
 
 
-| Setting                     | Metadata Field         | Default / Fallback String | Notes                                                                                                 |
-| --------------------------- | ---------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `{{ sep }}`                 | N/A                    | `' - ', not '-'`          | A fied separator for filenames, used when a folder or filename is composed of multiple Template Tags. |
-| `{{ date }}`                | `release_date`         | N/A                       | The release date of a media file. Does not have a default or fallback string.                        |
-| `{{ studio }}`              | `studio.name`          | `misc`                    | The media file **Studio** from Stash                                                                  |
-| `{{ performer.name }}`      | `performer.name`       | N/A                       | The performer name. Does not have a default of fallback string.                                       |
-| `{{ performer.birthyear }}` | `performer.birth_year` | `__unknown`__             | The performer birth year.                                                                             |
-| `{{ performer.country }}`   | `performer.country`    | `__unknown`__             | The performer country of birth.                                                                       |
-| `{{ extension }}`           | N/A                    | N/A                       |                                                                                                       |
+| Setting                     | Metadata Field         | Default / Fallback String | Notes                                                                                                                                                                   |
+| --------------------------- | ---------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `{{ sep }}`                 | N/A                    | `' - ', not '-'`          | A fied separator for filenames, used when a folder or filename is composed of multiple Template Tags.                                                                   |
+| `{{ date }}`                | `release_date`         | N/A                       | The release date of a media file. Does not have a default or fallback string.                                                                                          |
+| `{{ studio }}`              | `studio.name`          | `misc`                    | The media file **Studio** from Stash                                                                                                                                    |
+| `{{ performer.name }}`      | `performer.name`       | N/A                       | The performer name. Does not have a default of fallback string.                                                                                                         |
+| `{{ performer.birthyear }}` | `performer.birth_year` | `__unknown`__             | The performer birth year.                                                                                                                                               |
+| `{{ performer.country }}`   | `performer.country`    | `__unknown`__             | The performer country of birth.                                                                                                                                         |
+| `{{ extension }}`           | N/A                    | N/A                       | The `MIME` extension of the file being moved. This **should** be the correct extension for the real file type, we do not trust the file extension of the original file. |
 
 
 ### A Note on `{{ sep }}`

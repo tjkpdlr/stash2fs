@@ -4,6 +4,7 @@
 
 - `stash2fs` is written in Python as a [click](https://click.palletsprojects.com/en/stable/) application and managed by [uv.](https://github.com/astral-sh/uv)
 - configuration is managed internally by [pydantic-settings.](https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings)
+- GraphQL operations are handled by [gql](https://gql.readthedocs.io/en/stable/)
 
 ## Non-Goals and Constraints
 
