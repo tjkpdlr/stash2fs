@@ -1,26 +1,21 @@
-# `stash2fs scene mv` — single scene
+# `stash2fs scene mv` 
 
-Move one scene (and each of its files) to template-derived locations.
-
-## Dependencies
-
-- [`../_global.md`](../_global.md)
-- [`../scene.md`](../scene.md)
-
-Do **not** read `scene/bulk-mv.md`, `image/*`, or `gallery/*` for this task.
+Moves a single **Scene** to the `stash2fs` **Library** following the configured templates.
 
 ## CLI
 
 ```
-stash2fs scene mv <ID> [--template-name NAME]
+stash2fs scene mv <ID>
 ```
 
-| Argument / option | Required | Description |
-|---|---|---|
-| `<ID>` | yes | Stash **scene** id (not file id). |
-| `--template-name NAME` | no | Force a named entry from `templates.scene.by_tag`, `.by_studio`, or `.by_path` instead of auto-selection. |
 
-Global options: see [`../_global.md`](../_global.md).
+| Argument / option      | Required | Description                                                                                               |
+| ---------------------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `<ID>`                 | yes      | Stash **scene** id (not file id).                                                                         |
+| `--template-name NAME` | no       | Force a named entry from `templates.scene.by_tag`, `.by_studio`, or `.by_path` instead of auto-selection. |
+
+
+Global options: see `[../_global.md](../_global.md)`.
 
 ## Behavior
 
@@ -35,7 +30,7 @@ Idempotent: destination equals current → `unchanged`.
 
 - Register under `click` group `scene`, command name `mv`.
 - Reuse `core.mover.process_item(client, settings, "scene", id)` (or equivalent) so the
-  plugin hook can call the same function.
+plugin hook can call the same function.
 
 ## Acceptance criteria
 
@@ -54,3 +49,4 @@ stash2fs scene mv 1234
 stash2fs scene mv 1234 --dry-run
 stash2fs scene mv 1234 --template-name rename_tag
 ```
+

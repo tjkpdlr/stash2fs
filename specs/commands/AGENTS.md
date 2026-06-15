@@ -8,7 +8,6 @@ This directory contains individual specifications for `stash2fs` commands, one-p
 
 ```
 specs/
-  README.md              ← decision log + index (read once if unsure about scope)
   commands/
     AGENTS.md              ← you are here
     _global.md             ← shared CLI behavior (always read for any command work)

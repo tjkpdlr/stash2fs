@@ -17,7 +17,59 @@
 - `stash2fs` **never** modifies any files or data when executing in **dry run** mode.
 - `stash2fs` **does not** provide its own GUI.
 
-## File Handling
+## Design Principles
+
+### KISS - Keep it Simple, Stupid
+
+This tool **must** be easy to maintain, operate and the code needs to be easy to comprehend. Therefore:
+
+- **never** add extra layers of abstractions when they are not needed.
+- **always** leverage existing functions instead of implementing new ones.
+- **always** defer to Stash the heavylifting when possible, this is just a plugin afterall.
+
+### Favor Pure Functional Code
+
+Since most of the operations we make have no side-effects - we mostly defer those to Stash via API, most of our functions **should** be pure functional code when possible. This makes up for code that's easier to test and modify.
+
+### Indempotency
+
+- We **never** move files that are already in the appropriate place.
+- The tool can be executed multiple times with no side effects if files are already organized.
+
+## Python Coding Standards
+
+### no `__init__.py` unless required
+
+New versions of python no not require the existence of the `__init__.py` file on every subpackage directory and their use is discouraged. Only create this file when package initialization code is absolutely required during import.
+
+### reuse of click options
+
+Command line parameters are handled by Click's [options](https://click.palletsprojects.com/en/stable/options/#). Since many commands share the same options, there's no point in replicating the code everywhere. Common options are therefore made available on `stash2fs/cli/options.py` as **Decorators** so they can be imported and quickly added to **Command** definitions.
+
+## Package Layout
+
+```bash
+stash2fs/
+  __main__.py             # CLI entrypoint: configured as `stash2fs` in pyproject.toml >
+  cli/                    # Click CLI specific code
+    main.py               # click root group
+    options.py            # common command line options as decorators
+    commands:             # subpackage containing command definitions
+      scene.py            # `scene mv` and friends
+      image.py            # `image mv` and friends
+      gallery.py          # `gallery mv` and friends
+  core/                   # core components
+    logging.py            # logging setup that works in both CLI and plugin contexts
+    models.py             # pydantic models for Item, File, RenderContext
+    mover.py              # orchestrates: resolve -> plan -> validate -> moveFiles
+    planner.py            # compute MovePlan(s) for an item (pure)
+    settings.py           # pydantic-settings Settings and defaults
+    templating.py         # Jinja2 environment, variable mapping, selection logic
+    validation.py         # library-path + collision checks (pure given inputs)
+  stash/
+    client.py             # GraphQL transport (httpx), auth, error mapping
+    queries.py            # query/mutation strings + typed wrappers
+```
 
 `stash2fs` never moves files directly, instead it **always** relies on the `moveFiles` mutation provided by the Stash GraphQL API. This ensures consistency with the Stash database and prevents bugs caused by drifting, and accidental moves outside the Stash Library which would cause files to be inacessible from Stash.
 
@@ -25,13 +77,13 @@
 
 The `stash2fs` **LIbrary** is simply the filesystem root where all files are saved by `stash2fs`. This is a directory managed by Stash, as files managed by `stash2fs` need to be managed by Stash itself.
 
-The library layout is configurable, but defaults to the **template** 
+The library layout is configurable, but defaults to the **template**
 
 ```
 {{ media_type }}/{{ studio }}/{{ date }} - {{ title }}.{{ extension }}
 ```
 
-where:  
+where:
 
 #### `{{ media_type }}`
 
@@ -39,7 +91,7 @@ Is the type of media that directory contains, such as `image`, `scene` or `galle
 
 #### `{{ studio }}`
 
-Is the studio a media file is atributed to. If that information is missing, this defaults to `__missing-studio__` 
+Is the studio a media file is atributed to. If that information is missing, this defaults to `__missing-studio__`
 
 #### `{{ date }}`
 
@@ -51,7 +103,7 @@ Is the scene or gallery title, when available. When this metadata isn't availabl
 
 #### `{{ extension }}`
 
-Is the true extension for the file being saved. That is: the extension for the MIME data type of the file, which may differ from the extension the file was obtained with. 
+Is the true extension for the file being saved. That is: the extension for the MIME data type of the file, which may differ from the extension the file was obtained with.
 
 ## The Index
 
@@ -80,11 +132,11 @@ Media Files with no attributed performers may be linked within a special directo
 
 #### `index/performers/by-birthyear`
 
-This **Index Root** contains one directory for each **birthday year** found in Stash metadata for the **performers** in managed files, then inside each **year** subdirectory, it contains one directory for each **performer name** born on that year. 
+This **Index Root** contains one directory for each **birthday year** found in Stash metadata for the **performers** in managed files, then inside each **year** subdirectory, it contains one directory for each **performer name** born on that year.
 
 Inside each leaf directory there are symbolic links to all files that **performer** is attributed to.
 
-Media files for performers with no known **birthday year** are linked within a special directory named **`index/performers/by-birthyear/__unknown__`
+Media files for performers with no known **birthday year** are linked within a special directory named `index/performers/by-birthyear/__unknown__`
 
 #### `index/performers/by-country`
 
@@ -96,7 +148,7 @@ Media files for performers with no known country of birth are linked within a sp
 
 #### `index/scenes/by-year`
 
-This **Index Root** contains one directory for each **production year** found in **scene** metadata in the Stash database. 
+This **Index Root** contains one directory for each **production year** found in **scene** metadata in the Stash database.
 
 Inside each leaf directory, there are symbolic links to all files beloning to **scenes** produced that year.
 

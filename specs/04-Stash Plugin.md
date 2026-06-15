@@ -10,3 +10,4 @@ The Stash plugin interface allows `stash2fs` to be executed directly from Stash 
 | `Scene.Update.Post`   | `stash2fs scene mv`   |
 
 
+This process is intermediated by a standalone python script `stash-plugin-wrapper` - the sole purpose of this script is to serve as the call point of `stash2fs` from the Stash Plugin Raw Interface, receiving the `stdin` inputs sent by Stash and formatting them as a `stash2fs` command line with the appropriate parameters; then calling `stash2fs` with this command line.

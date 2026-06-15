@@ -5,6 +5,5 @@
 ## Rules
 
 - **always** read the `AGENTS.md` file inside each directory before making changes to files inside
-
-- specs live under `./specs` - start with `./specs/AGENTS.md`
+- specs live under `./specs` - start with `./specs/AGENTS.md` for implementation
 
